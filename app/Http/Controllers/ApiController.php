@@ -17,16 +17,18 @@ class ApiController extends Controller
     public function index() {
         return Series::all();
     }
+    
     public function store(SeriesFormRequest $request) {
         return response()
             ->json($this->seriesRepository->add($request), 201);
     }
 
     public function show(int $series) {
-        $series = Series::whereId($series)
-        ->with('seasons.episodes')
-        ->first();
-        return $series;
+        $seriesModel = Series::with('seasons.episodes')->find($series);
+        if ($seriesModel === null) {
+            return response()->json(['message' => 'Series not found'], 404);
+        }
+        return $seriesModel;
     }
 
     public function update(Series $series, SeriesFormRequest $request) {
