@@ -13,7 +13,12 @@ class Episode extends Model
     
     protected $fillable = ['number'];
 
+    protected $casts = [                  //Mapeia um atributo para um tipo
+        'watched' => 'bool'
+    ];
+
     public function season() {
         return $this->belongsTo(Season::class);
     }
+
 }
